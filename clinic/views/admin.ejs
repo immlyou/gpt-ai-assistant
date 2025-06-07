@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>後臺管理</title>
+</head>
+<body>
+<h2>新增訊息</h2>
+<form action="/admin" method="post">
+<label>類型:</label>
+<select name="type">
+<option value="announcements">公告</option>
+<option value="knowledge">醫學新知</option>
+</select><br>
+<label>內容:</label><br>
+<textarea name="content" rows="4" cols="50"></textarea><br>
+<button type="submit">送出</button>
+</form>
+</body>
+</html>

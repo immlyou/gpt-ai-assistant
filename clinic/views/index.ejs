@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>莊豐如診所｜專業醫療服務</title>
+</head>
+<body bgcolor="#f5f8ff" text="#2c3e50" style="font-family: 'Microsoft JhengHei', Arial, sans-serif; margin: 0; padding: 0;">
+<!-- 頂部標題區 -->
+<table width="100%" bgcolor="#4a90e2" cellpadding="20" cellspacing="0" border="0">
+    <tr>
+        <td align="center">
+            <table cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                    <td bgcolor="#ffffff" style="border-radius: 50px; padding: 15px;" align="center">
+                        <font size="6" color="#4a90e2"><b>🏥</b></font>
+                    </td>
+                    <td width="20"></td>
+                    <td>
+                        <font size="7" color="#ffffff" face="Microsoft JhengHei"><b>莊豐如診所</b></font><br>
+                        <font size="3" color="#e8f4fd">專業醫療・溫馨照護</font>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+<!-- 最新公告區 -->
+<div style="padding:20px;">
+<h2>最新公告</h2>
+<ul>
+<% announcements.forEach(function(a){ %>
+<li><%= a %></li>
+<% }) %>
+</ul>
+<h2>醫學新知</h2>
+<ul>
+<% knowledge.forEach(function(k){ %>
+<li><%= k %></li>
+<% }) %>
+</ul>
+</div>
+</body>
+</html>
