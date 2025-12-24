@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Care Canvas Mockup</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-50 text-slate-900">
+  <!-- 欠款提醒 Modal -->
+  <div id="arrearsModal" class="fixed inset-0 z-50 hidden">
+    <!-- backdrop -->
+    <div class="absolute inset-0 bg-slate-900/50" data-close="1"></div>
+
+    <!-- dialog -->
+    <div class="relative mx-auto mt-24 w-[92%] max-w-lg">
+      <div class="rounded-2xl bg-white shadow-xl ring-1 ring-slate-200 overflow-hidden">
+        <div class="p-5 border-b">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <div class="text-sm text-slate-500">💳 櫃檯提醒</div>
+              <div class="text-lg font-semibold">病人尚有未收款項</div>
+            </div>
+            <button class="h-9 w-9 rounded-xl hover:bg-slate-100 flex items-center justify-center"
+                    aria-label="Close" data-close="1">✖️</button>
+          </div>
+        </div>
+
+        <div class="p-5 space-y-3">
+          <div class="rounded-xl bg-red-50 ring-1 ring-red-200 p-4">
+            <div class="text-sm text-red-700">尚欠金額</div>
+            <div class="text-2xl font-semibold text-red-800" id="arrearsAmount">$17,500</div>
+            <div class="text-sm text-red-700 mt-1" id="arrearsHint">建議本次完成療程前先確認收款。</div>
+          </div>
+
+          <div class="rounded-xl bg-slate-50 ring-1 ring-slate-200 p-4 text-sm text-slate-700">
+            <div class="font-semibold mb-1">快速動作</div>
+            <ul class="list-disc pl-5 space-y-1">
+              <li>點「去收款」會帶你到頁面底部收費區。</li>
+              <li>若本次已確認，點「本次不再提醒」。</li>
+            </ul>
+          </div>
+
+          <label class="flex items-center gap-2 text-sm text-slate-700">
+            <input id="dontRemindThisVisit" type="checkbox" class="h-4 w-4 rounded border-slate-300" />
+            本次不再提醒（本機本次開頁有效）
+          </label>
+        </div>
+
+        <div class="p-5 border-t flex flex-wrap gap-2 justify-end">
+          <button class="px-3 py-2 rounded-lg border bg-white text-sm hover:bg-slate-50" data-close="1">
+            先關閉
+          </button>
+          <button id="goPaymentBtn" class="px-3 py-2 rounded-lg bg-blue-600 text-white text-sm hover:bg-blue-700">
+            去收款
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="min-h-screen">
+    <!-- Top App Bar -->
+    <div class="border-b bg-white">
+      <div class="mx-auto max-w-[1440px] px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="h-9 w-9 rounded-xl bg-blue-600 text-white flex items-center justify-center font-semibold">CC</div>
+          <div>
+            <div class="text-sm text-slate-500">自費療程管理</div>
+            <div class="text-base font-semibold">Care Canvas</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button class="px-3 py-2 rounded-lg border bg-white text-sm hover:bg-slate-50">🔍 搜尋</button>
+          <button class="px-3 py-2 rounded-lg border bg-white text-sm hover:bg-slate-50">📊 總覽</button>
+          <button class="px-3 py-2 rounded-lg bg-blue-600 text-white text-sm hover:bg-blue-700">➕ 建立療程</button>
+        </div>
+      </div>
+    </div>
+
+    <main class="mx-auto max-w-[1440px] px-6 py-6 space-y-6">
+      <!-- A. Header Summary Card -->
+      <section class="rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 p-5">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <!-- Left: Patient -->
+          <div class="flex items-start gap-4">
+            <div class="h-12 w-12 rounded-2xl bg-slate-900 text-white flex items-center justify-center font-semibold">王</div>
+            <div class="space-y-1">
+              <div class="flex flex-wrap items-center gap-2">
+                <div class="text-xl font-semibold">王小明</div>
+                <span class="text-xs px-2 py-1 rounded-full bg-slate-100 text-slate-700">男 45歲</span>
+                <span class="text-xs px-2 py-1 rounded-full bg-green-50 text-green-700 ring-1 ring-green-200">🟢 進行中</span>
+              </div>
+              <div class="text-sm text-slate-600">
+                📞 09xx-xxx-xxx <span class="mx-2 text-slate-300">|</span> ID: 123456
+              </div>
+              <div class="text-sm text-slate-600">
+                🩺 主治醫師：莊醫師 <span class="mx-2 text-slate-300">|</span> 開始日：2025/11/20
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Stats Chips -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 lg:max-w-[640px] lg:justify-end">
+            <div class="rounded-xl bg-slate-50 ring-1 ring-slate-200 px-3 py-2">
+              <div class="text-xs text-slate-500">療程方案</div>
+              <div class="text-sm font-semibold">減重針 12 週方案</div>
+            </div>
+            <div class="rounded-xl bg-slate-50 ring-1 ring-slate-200 px-3 py-2">
+              <div class="text-xs text-slate-500">進度</div>
+              <div class="text-sm font-semibold">✔ 2 / 12 次</div>
+            </div>
+            <div class="rounded-xl bg-slate-50 ring-1 ring-slate-200 px-3 py-2">
+              <div class="text-xs text-slate-500">下次預約</div>
+              <div class="text-sm font-semibold">📅 2026/01/05</div>
+            </div>
+            <div class="rounded-xl bg-slate-50 ring-1 ring-slate-200 px-3 py-2">
+              <div class="text-xs text-slate-500">總額</div>
+              <div class="text-sm font-semibold">$42,000</div>
+            </div>
+            <div class="rounded-xl bg-slate-50 ring-1 ring-slate-200 px-3 py-2">
+              <div class="text-xs text-slate-500">已收</div>
+              <div class="text-sm font-semibold text-slate-900">$24,500</div>
+            </div>
+            <div class="rounded-xl bg-red-50 ring-1 ring-red-200 px-3 py-2">
+              <div class="text-xs text-red-600">尚欠</div>
+              <div class="text-sm font-semibold text-red-700" id="arrearsChip">$17,500</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- B + C -->
+      <section class="grid grid-cols-12 gap-6">
+        <!-- B. Session Timeline -->
+        <div class="col-span-12 lg:col-span-7 rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
+          <div class="p-5 border-b">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-sm text-slate-500">🗓 療程進度</div>
+                <div class="text-base font-semibold">Session Timeline</div>
+              </div>
+              <div class="flex items-center gap-2">
+                <button class="px-3 py-2 rounded-lg border bg-white text-sm hover:bg-slate-50">➕ 新增一次</button>
+                <button class="px-3 py-2 rounded-lg border bg-white text-sm hover:bg-slate-50">篩選</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-5">
+            <div class="overflow-auto">
+              <table class="w-full text-sm">
+                <thead class="text-slate-500">
+                  <tr class="border-b">
+                    <th class="text-left font-medium py-2 pr-2 w-14">#</th>
+                    <th class="text-left font-medium py-2 pr-2 w-28">日期</th>
+                    <th class="text-left font-medium py-2 pr-2">內容</th>
+                    <th class="text-left font-medium py-2 pr-2 w-24">操作人</th>
+                    <th class="text-left font-medium py-2 pr-2 w-24">狀態</th>
+                  </tr>
+                </thead>
+                <tbody id="sessionTable" class="divide-y"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- C. Right column -->
+        <div class="col-span-12 lg:col-span-5 space-y-6">
+          <!-- C1. Session Detail -->
+          <div class="rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
+            <div class="p-5 border-b">
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <div class="text-sm text-slate-500">📝 本次紀錄</div>
+                  <div class="text-base font-semibold" id="detailTitle">Session #2｜2025/12/15</div>
+                </div>
+                <span id="detailStatusBadge" class="text-xs px-2 py-1 rounded-full bg-green-50 text-green-700 ring-1 ring-green-200">✔ 完成</span>
+              </div>
+            </div>
+
+            <div class="p-5 space-y-4">
+              <div class="grid grid-cols-2 gap-3">
+                <label class="space-y-1">
+                  <div class="text-xs text-slate-500">日期</div>
+                  <input id="detailDate" class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200" />
+                </label>
+                <label class="space-y-1">
+                  <div class="text-xs text-slate-500">劑量</div>
+                  <select id="detailDose" class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200">
+                    <option>0.25 mg</option>
+                    <option>0.5 mg</option>
+                    <option>1.0 mg</option>
+                  </select>
+                </label>
+                <label class="space-y-1 col-span-2">
+                  <div class="text-xs text-slate-500">操作人員</div>
+                  <input id="detailStaff" class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200" />
+                </label>
+                <label class="space-y-1 col-span-2">
+                  <div class="text-xs text-slate-500">病人反應</div>
+                  <textarea id="detailReaction" rows="2" class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"></textarea>
+                </label>
+                <label class="space-y-1 col-span-2">
+                  <div class="text-xs text-slate-500">本次 Memo</div>
+                  <textarea id="detailMemo" rows="2" class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-200"></textarea>
+                </label>
+              </div>
+
+              <div class="flex items-center justify-end gap-2 pt-1">
+                <button class="px-3 py-2 rounded-lg border bg-white text-sm hover:bg-slate-50">💾 儲存</button>
+                <button class="px-3 py-2 rounded-lg bg-green-600 text-white text-sm hover:bg-green-700">✔ 標記完成</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- C2. Memo Sticky -->
+          <div class="rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
+            <div class="p-5 border-b">
+              <div class="text-sm text-slate-500">📌 重要 Memo / 提醒</div>
+              <div class="text-base font-semibold">Sticky Notes</div>
+            </div>
+            <div class="p-5 space-y-2">
+              <div class="flex items-start gap-2 rounded-xl bg-red-50 ring-1 ring-red-200 p-3">
+                <div class="pt-0.5">🔴</div>
+                <div class="flex-1">
+                  <div class="text-sm font-semibold text-red-800">暈針風險</div>
+                  <div class="text-sm text-red-700">需平躺 10 分鐘再離開。</div>
+                </div>
+              </div>
+              <div class="flex items-start gap-2 rounded-xl bg-amber-50 ring-1 ring-amber-200 p-3">
+                <div class="pt-0.5">🟡</div>
+                <div class="flex-1">
+                  <div class="text-sm font-semibold text-amber-800">行為提醒</div>
+                  <div class="text-sm text-amber-700">常忘記帶藥、偏好晚診。</div>
+                </div>
+              </div>
+              <div class="flex items-start gap-2 rounded-xl bg-green-50 ring-1 ring-green-200 p-3">
+                <div class="pt-0.5">🟢</div>
+                <div class="flex-1">
+                  <div class="text-sm font-semibold text-green-800">醫師建議</div>
+                  <div class="text-sm text-green-700">下次評估是否加量。</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- D. Payment Bar -->
+      <section id="paymentSection" class="rounded-2xl bg-white shadow-sm ring-1 ring-slate-200 p-5">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+          <div class="space-y-1">
+            <div class="text-sm text-slate-500">💳 收費紀錄</div>
+            <div class="text-sm">
+              <span class="font-semibold">12/01</span> 現金 <span class="font-semibold">$21,000</span>
+              <span class="mx-2 text-slate-300">|</span>
+              <span class="font-semibold">12/15</span> 刷卡 <span class="font-semibold">$3,500</span>
+              <span class="mx-2 text-slate-300">|</span>
+              <span class="text-red-700 font-semibold">尚欠 <span id="arrearsInline">$17,500</span></span>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-2 justify-end">
+            <button class="px-3 py-2 rounded-lg bg-blue-600 text-white text-sm hover:bg-blue-700">➕ 收款</button>
+            <button class="px-3 py-2 rounded-lg border bg-white text-sm hover:bg-slate-50">🧾 列印</button>
+            <button class="px-3 py-2 rounded-lg border bg-white text-sm hover:bg-slate-50">📤 匯出</button>
+          </div>
+        </div>
+      </section>
+
+      <footer class="py-8 text-center text-xs text-slate-500">
+        Mockup only · Tailwind CDN · Care Canvas
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // ===== Mock business state =====
+    // 你之後接 API 時，只要把這個 arrearsAmountCents 換成後端回傳即可
+    let arrearsAmountCents = 17500 * 100; // $17,500
+
+    // Mock sessions
+    const sessions = [
+      { id: 1, date: "2025/12/01", content: "注射", dose: "0.25 mg", staff: "護理師A", status: "done", reaction: "無不適", memo: "初次衛教完成。" },
+      { id: 2, date: "2025/12/15", content: "注射", dose: "0.5 mg",  staff: "護理師A", status: "done", reaction: "輕微噁心", memo: "建議多喝水，觀察食慾。" },
+      { id: 3, date: "2026/01/05", content: "注射", dose: "0.5 mg",  staff: "-",      status: "scheduled", reaction: "", memo: "" },
+      { id: 4, date: "--",         content: "",     dose: "",       staff: "",       status: "todo", reaction: "", memo: "" },
+      { id: 5, date: "--",         content: "",     dose: "",       staff: "",       status: "todo", reaction: "", memo: "" }
+    ];
+
+    const statusMeta = {
+      done:      { label: "✔ 完成", rowBg: "bg-green-50", rowRing: "ring-1 ring-green-200", dot: "text-green-600", badge: "bg-green-50 text-green-700 ring-green-200" },
+      scheduled: { label: "⏳ 預約", rowBg: "bg-amber-50", rowRing: "ring-1 ring-amber-200", dot: "text-amber-600", badge: "bg-amber-50 text-amber-700 ring-amber-200" },
+      todo:      { label: "未開始", rowBg: "bg-white",    rowRing: "",                    dot: "text-slate-300", badge: "bg-slate-50 text-slate-700 ring-slate-200" }
+    };
+
+    let selectedId = 2;
+
+    // ===== Helpers =====
+    function formatCurrencyTWD(cents) {
+      const n = Math.max(0, Math.round(cents / 100));
+      return "$" + n.toLocaleString("zh-TW");
+    }
+
+    function flashElement(el) {
+      el.classList.add("ring-2", "ring-blue-300");
+      setTimeout(() => el.classList.remove("ring-2", "ring-blue-300"), 1200);
+    }
+
+    // ===== Render table & detail =====
+    function renderTable() {
+      const tbody = document.getElementById("sessionTable");
+      tbody.innerHTML = "";
+
+      sessions.forEach(s => {
+        const meta = statusMeta[s.status];
+        const isSelected = s.id === selectedId;
+
+        const tr = document.createElement("tr");
+        tr.className = [
+          "cursor-pointer transition",
+          "hover:bg-blue-50/40",
+          isSelected ? "bg-blue-50 ring-1 ring-blue-200" : (meta.rowBg + " " + meta.rowRing)
+        ].join(" ");
+
+        tr.innerHTML = `
+          <td class="py-3 pr-2 font-semibold">
+            <div class="flex items-center gap-2">
+              <span class="${isSelected ? "text-blue-600" : meta.dot}">●</span>
+              <span>${s.id}</span>
+            </div>
+          </td>
+          <td class="py-3 pr-2 text-slate-700">${s.date}</td>
+          <td class="py-3 pr-2 text-slate-700">${[s.content, s.dose].filter(Boolean).join(" ") || "-"}</td>
+          <td class="py-3 pr-2 text-slate-700">${s.staff || "-"}</td>
+          <td class="py-3 pr-2">
+            <span class="text-xs px-2 py-1 rounded-full ring-1 ${isSelected ? "bg-blue-50 text-blue-700 ring-blue-200" : meta.badge}">
+              ${isSelected ? "● 選取中" : meta.label}
+            </span>
+          </td>
+        `;
+
+        tr.addEventListener("click", () => {
+          selectedId = s.id;
+          renderTable();
+          renderDetail();
+        });
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderDetail() {
+      const s = sessions.find(x => x.id === selectedId) || sessions[0];
+      const meta = statusMeta[s.status];
+
+      document.getElementById("detailTitle").textContent = `Session #${s.id}｜${s.date}`;
+      const badge = document.getElementById("detailStatusBadge");
+      badge.textContent = meta.label;
+      badge.className = `text-xs px-2 py-1 rounded-full ring-1 ${meta.badge}`;
+
+      document.getElementById("detailDate").value = s.date === "--" ? "" : s.date;
+      document.getElementById("detailStaff").value = s.staff === "-" ? "" : (s.staff || "");
+      document.getElementById("detailReaction").value = s.reaction || "";
+      document.getElementById("detailMemo").value = s.memo || "";
+
+      const doseSelect = document.getElementById("detailDose");
+      const option = Array.from(doseSelect.options).find(o => o.value === s.dose);
+      if (option) doseSelect.value = s.dose;
+      else doseSelect.value = "0.5 mg";
+    }
+
+    // ===== Arrears modal logic =====
+    const modal = document.getElementById("arrearsModal");
+    const arrearsAmountEl = document.getElementById("arrearsAmount");
+    const dontRemindCheckbox = document.getElementById("dontRemindThisVisit");
+    const goPaymentBtn = document.getElementById("goPaymentBtn");
+
+    function shouldShowArrearsModal() {
+      if (arrearsAmountCents <= 0) return false;
+      // 本次不再提醒：只記在 sessionStorage（同一個瀏覽器分頁生命週期）
+      const suppressed = sessionStorage.getItem("careCanvas_arrears_suppressed") === "1";
+      return !suppressed;
+    }
+
+    function openArrearsModal() {
+      arrearsAmountEl.textContent = formatCurrencyTWD(arrearsAmountCents);
+      modal.classList.remove("hidden");
+      document.body.classList.add("overflow-hidden");
+    }
+
+    function closeArrearsModal() {
+      if (dontRemindCheckbox.checked) {
+        sessionStorage.setItem("careCanvas_arrears_suppressed", "1");
+      }
+      modal.classList.add("hidden");
+      document.body.classList.remove("overflow-hidden");
+    }
+
+    // Close handlers (backdrop / X / close button)
+    modal.addEventListener("click", (e) => {
+      const t = e.target;
+      if (t && t.getAttribute("data-close") === "1") {
+        closeArrearsModal();
+      }
+    });
+
+    // Go to payment
+    goPaymentBtn.addEventListener("click", () => {
+      closeArrearsModal();
+      const payment = document.getElementById("paymentSection");
+      payment.scrollIntoView({ behavior: "smooth", block: "center" });
+      setTimeout(() => flashElement(payment), 350);
+    });
+
+    // Sync chips
+    function renderArrearsChips() {
+      const amount = formatCurrencyTWD(arrearsAmountCents);
+      document.getElementById("arrearsChip").textContent = amount;
+      document.getElementById("arrearsInline").textContent = amount;
+    }
+
+    // ===== Init =====
+    renderArrearsChips();
+    renderTable();
+    renderDetail();
+
+    // 進入病人畫面時提醒櫃檯
+    window.addEventListener("load", () => {
+      if (shouldShowArrearsModal()) {
+        openArrearsModal();
+      }
+    });
+
+    // Esc to close
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !modal.classList.contains("hidden")) {
+        closeArrearsModal();
+      }
+    });
+  </script>
+</body>
+</html>
